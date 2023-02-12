@@ -5,6 +5,7 @@ import portfolio.beom.domain.member.Member;
 
 import java.util.Optional;
 
+//todo @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByName(String name);

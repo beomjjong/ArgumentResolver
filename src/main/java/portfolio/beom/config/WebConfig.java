@@ -1,4 +1,4 @@
-package portfolio.beom;
+package portfolio.beom.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

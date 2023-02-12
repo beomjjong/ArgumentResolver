@@ -1,4 +1,4 @@
-package portfolio.beom.domain.member;
+package portfolio.beom.argumentresolver;
 
 public class SessionConst {
     public static final String LOGIN_MEMBER = "loginMember";

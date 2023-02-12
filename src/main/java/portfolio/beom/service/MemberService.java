@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio.beom.domain.member.Member;
-import portfolio.beom.domain.member.request.LoginMemberRequest;
-import portfolio.beom.domain.member.request.SaveMemberRequest;
-import portfolio.beom.domain.member.response.LoginMemberResponse;
-import portfolio.beom.domain.member.response.SaveMemberResponse;
+import portfolio.beom.dto.request.LoginMemberRequest;
+import portfolio.beom.dto.request.SaveMemberRequest;
+import portfolio.beom.dto.response.LoginMemberResponse;
+import portfolio.beom.dto.response.SaveMemberResponse;
 import portfolio.beom.repository.MemberRepository;
 
 @RequiredArgsConstructor
@@ -16,9 +16,12 @@ import portfolio.beom.repository.MemberRepository;
 @Service
 public class MemberService {
 
+    //todo 인터페이스 만들기.
+
     private final MemberRepository memberRepository;
     @Transactional
     public SaveMemberResponse save(SaveMemberRequest request) {
+        //todo 비밀번호 암호화
         Member member = Member.builder()
                 .name(request.getName())
                 .password(request.getPassword())

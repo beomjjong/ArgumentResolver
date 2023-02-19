@@ -7,4 +7,10 @@ public class InvalidMemberException extends BeomException {
     public InvalidMemberException() {
         super(MESSAGE);
     }
+
+
+    @Override
+    public int statusCode() {
+        return 400;
+    }
 }

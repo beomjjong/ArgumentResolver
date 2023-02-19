@@ -3,57 +3,61 @@ package portfolio.beom.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import portfolio.beom.argumentresolver.Login;
+import org.springframework.web.bind.annotation.*;
 import portfolio.beom.argumentresolver.MemberSession;
 import portfolio.beom.argumentresolver.SessionConst;
-import portfolio.beom.domain.member.Member;
-import portfolio.beom.dto.request.LoginMemberRequest;
 import portfolio.beom.dto.request.SaveMemberRequest;
-import portfolio.beom.dto.response.LoginMemberResponse;
+import portfolio.beom.dto.request.UpdateMemberRequest;
 import portfolio.beom.dto.response.SaveMemberResponse;
+import portfolio.beom.dto.response.UpdateMemberResponse;
 import portfolio.beom.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+
 @RequiredArgsConstructor
+@RequestMapping("/api/members")
 @RestController
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/api/members/save")
-    public ResponseEntity<SaveMemberResponse> save(@RequestBody SaveMemberRequest request) {
+    @GetMapping
+    public ResponseEntity<SaveMemberResponse> memberSave(@RequestBody SaveMemberRequest request) {
         SaveMemberResponse saveMember = memberService.save(request);
         return new ResponseEntity<>(saveMember, HttpStatus.CREATED);
     }
 
-    @PostMapping("/api/login")
-    public ResponseEntity<LoginMemberResponse> login(@RequestBody LoginMemberRequest loginMemberRequest,
-                                                     HttpServletRequest request) {
-        LoginMemberResponse memberResponse = memberService.login(loginMemberRequest);
+    @PutMapping("/{memberId}")
+    public ResponseEntity<UpdateMemberResponse> memberUpdate(@PathVariable Long memberId,
+                                                             @RequestBody UpdateMemberRequest updateMemberRequest,
+                                                             HttpServletRequest request){
 
-        //우리가 프로젝트에서 세션으로 사용할 객체.
-        MemberSession memberSession = MemberSession.builder()
-                .memberId(memberResponse.getId())
-                .email(memberResponse.getEmail())
-                .build();
+        HttpSession session = request.getSession(false);
+
+        MemberSession attribute = (MemberSession) session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        if (attribute != null){
+            UpdateMemberResponse updateMember = memberService.update(memberId, updateMemberRequest);
+            return new ResponseEntity<>(updateMember, HttpStatus.OK);
+        }
+        throw new IllegalArgumentException("업데이트 실패");
+    }
+
+    @DeleteMapping("/{memberId}")
+    public String memberDelete(@PathVariable Long memberId, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, memberSession);
+        MemberSession attribute = (MemberSession) session.getAttribute(SessionConst.LOGIN_MEMBER);
 
-        return new ResponseEntity<>(memberResponse, HttpStatus.OK);
-    }
-
-    @GetMapping
-    public String loginArgumentResolver(@Login MemberSession session) {
-        if (session == null) {
-            return "없음";
+        if (attribute != null) {
+            memberService.delete(memberId);
+            return "회원삭제 완료되었습니다.";
         }
-        return "로그인";
+        return "본인 외에는 삭제할 수 없습니다.";
+
     }
+
+
 }

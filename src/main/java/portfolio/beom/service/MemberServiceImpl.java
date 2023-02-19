@@ -4,12 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import portfolio.beom.argumentresolver.MemberSession;
 import portfolio.beom.domain.member.Member;
 import portfolio.beom.dto.request.LoginMemberRequest;
 import portfolio.beom.dto.request.SaveMemberRequest;
+import portfolio.beom.dto.request.UpdateMemberRequest;
 import portfolio.beom.dto.response.LoginMemberResponse;
 import portfolio.beom.dto.response.SaveMemberResponse;
+import portfolio.beom.dto.response.UpdateMemberResponse;
 import portfolio.beom.repository.MemberRepository;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -18,6 +23,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Override
     @Transactional
     public SaveMemberResponse save(SaveMemberRequest request) {
         //todo 비밀번호 암호화
@@ -32,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
         return new SaveMemberResponse(savedMember);
     }
 
+    @Override
     @Transactional
     public LoginMemberResponse login(LoginMemberRequest request) {
         Member loginMember = memberRepository.findByName(request.getName()).orElseThrow(IllegalArgumentException::new);
@@ -41,5 +48,30 @@ public class MemberServiceImpl implements MemberService {
         }
         return null;
 
+    }
+
+    @Override
+    @Transactional
+    public UpdateMemberResponse update(Long memberId, UpdateMemberRequest request) {
+        Member updatedMember = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+
+        updatedMember.update(request.getName(), BCrypt.hashpw(request.getPassword(),BCrypt.gensalt()), request.getEmail());
+
+        return new UpdateMemberResponse(updatedMember);
+    }
+
+    @Override
+    @Transactional
+    public MemberSession getUser(String email) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(IllegalArgumentException::new);
+
+        return new MemberSession(member);
+    }
+
+    @Override
+    public void delete(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+
+        memberRepository.delete(member);
     }
 }

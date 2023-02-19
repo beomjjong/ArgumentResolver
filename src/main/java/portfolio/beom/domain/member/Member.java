@@ -30,4 +30,11 @@ public class Member {
         this.password = password;
         this.email = email;
     }
+
+
+    public void update(String name, String password, String email){
+        this.name = name;
+        this.password = password;
+        this.email = email;
+    }
 }

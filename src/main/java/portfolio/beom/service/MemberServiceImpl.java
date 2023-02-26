@@ -26,7 +26,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public SaveMemberResponse save(SaveMemberRequest request) {
-        //todo 비밀번호 암호화
         Member member = Member.builder()
                 .name(request.getName())
                 .password(BCrypt.hashpw(request.getPassword(),BCrypt.gensalt())) //암호화 완료
@@ -69,6 +68,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void delete(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
 

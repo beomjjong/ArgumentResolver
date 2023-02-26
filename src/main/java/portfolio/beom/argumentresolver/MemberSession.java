@@ -10,16 +10,19 @@ import portfolio.beom.domain.member.Member;
 public class MemberSession {
 
     private Long memberId;
+    private String name;
     private String email;
 
     @Builder
-    public MemberSession(Long memberId, String email) {
+    public MemberSession(Long memberId, String name, String email) {
         this.memberId = memberId;
+        this.name = name;
         this.email = email;
     }
 
     public MemberSession(Member member) {
         this.memberId = member.getId();
+        this.name = member.getName();
         this.email = member.getEmail();
     }
 }

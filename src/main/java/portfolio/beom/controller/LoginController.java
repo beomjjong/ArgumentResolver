@@ -32,6 +32,7 @@ public class LoginController {
         //우리가 프로젝트에서 세션으로 사용할 객체.
         MemberSession memberSession = MemberSession.builder()
                 .memberId(memberResponse.getId())
+                .name(memberResponse.getName())
                 .email(memberResponse.getEmail())
                 .build();
 

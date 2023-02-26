@@ -6,7 +6,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import portfolio.beom.exadvice.InvalidMemberException;
+import portfolio.beom.exception.InvalidMemberException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,7 +18,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     public boolean supportsParameter(MethodParameter parameter) {
         log.info("supportsParameter 실행");
 
-        boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
+        boolean hasLoginAnnotation = parameter.hasParameterAnnotation(LoginUser.class);
         boolean hasMemberType = MemberSession.class.isAssignableFrom(parameter.getParameterType());
 
         return hasLoginAnnotation && hasMemberType;

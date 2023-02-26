@@ -1,4 +1,4 @@
-package portfolio.beom.exadvice;
+package portfolio.beom.exception;
 
 public abstract class BeomException extends RuntimeException {
 

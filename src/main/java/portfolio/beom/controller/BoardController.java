@@ -6,14 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import portfolio.beom.argumentresolver.LoginUser;
 import portfolio.beom.argumentresolver.MemberSession;
-import portfolio.beom.argumentresolver.SessionConst;
 import portfolio.beom.dto.request.WriteBoardRequest;
 import portfolio.beom.dto.response.WriteBoardResponse;
 import portfolio.beom.service.BoardService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,17 +21,11 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @PostMapping
-    public ResponseEntity<WriteBoardResponse> write(@RequestBody WriteBoardRequest writeBoardRequest,
-                                                    HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        MemberSession attribute = (MemberSession) session.getAttribute(SessionConst.LOGIN_MEMBER);
-
-        if (attribute != null) {
-            WriteBoardResponse writeBoard = boardService.save(writeBoardRequest);
-            return new ResponseEntity<>(writeBoard, HttpStatus.CREATED);
-        }
-        throw new IllegalArgumentException("권한이 없습니다.");
+    @PostMapping("/api/posts")
+    public ResponseEntity<WriteBoardResponse> write(@LoginUser MemberSession memberSession,
+                                                    @RequestBody @Valid WriteBoardRequest writeBoardRequest) {
+        WriteBoardResponse writeBoard = boardService.save(writeBoardRequest, memberSession);
+        return new ResponseEntity<>(writeBoard, HttpStatus.CREATED);
     }
 
 }

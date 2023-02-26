@@ -1,4 +1,4 @@
-package portfolio.beom.exadvice;
+package portfolio.beom.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,23 +6,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import portfolio.beom.controller.MemberController;
 
 import java.util.HashMap;
 import java.util.List;
 
 
-//todo 패키지 네임 변경 -> ex. exception,
-@RestControllerAdvice(basePackageClasses = MemberController.class)
+@RestControllerAdvice(basePackages = "portfolio.beom.controller")
 public class ExRestControllerAdvice {
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ErrorResult illegalExHandler(IllegalArgumentException e) {
-//        return new ErrorResult("BAD", e.getMessage());
-//    }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResult> exHandler(MethodArgumentNotValidException e) {
@@ -41,9 +33,9 @@ public class ExRestControllerAdvice {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResult> invalidMemberException(InvalidMemberException e) {
-//        ErrorResult body = new ErrorResult("BAD", e.getMessage());
-//        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorResult> invalidMemberException(BeomException e) {
+        ErrorResult errorResult = new ErrorResult("EX", e.getMessage(), null);
+        return new ResponseEntity<>(errorResult, HttpStatus.valueOf(e.statusCode()));
+    }
 }

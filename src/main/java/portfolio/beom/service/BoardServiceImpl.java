@@ -3,6 +3,7 @@ package portfolio.beom.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import portfolio.beom.argumentresolver.MemberSession;
 import portfolio.beom.argumentresolver.SessionConst;
 import portfolio.beom.domain.board.Board;
 import portfolio.beom.dto.request.WriteBoardRequest;
@@ -20,15 +21,16 @@ public class BoardServiceImpl implements BoardService{
 
     @Transactional
     @Override
-    public WriteBoardResponse save(WriteBoardRequest writeBoardRequest) {
+    public WriteBoardResponse save(WriteBoardRequest writeBoardRequest, MemberSession memberSession) {
+
         Board board = Board.builder()
-                .writer(SessionConst.LOGIN_MEMBER)
+                .writer(memberSession.getName())
                 .title(writeBoardRequest.getTitle())
                 .content(writeBoardRequest.getContent())
                 .createDate(LocalDateTime.now())
                 .build();
 
-        Board savedWrite = (Board) boardRepository.save(board);
+        Board savedWrite = boardRepository.save(board);
 
         return new WriteBoardResponse(savedWrite);
     }

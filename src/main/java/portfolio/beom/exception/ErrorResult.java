@@ -1,4 +1,4 @@
-package portfolio.beom.exadvice;
+package portfolio.beom.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +10,5 @@ import java.util.Map;
 public class ErrorResult {
     private String code;
     private String message;
-
     private Map validate;
 }

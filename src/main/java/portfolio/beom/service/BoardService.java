@@ -1,6 +1,8 @@
 package portfolio.beom.service;
 
+import org.springframework.data.domain.Page;
 import portfolio.beom.argumentresolver.MemberSession;
+import portfolio.beom.dto.request.BoardSearchCond;
 import portfolio.beom.dto.request.WriteBoardRequest;
 import portfolio.beom.dto.response.WriteBoardResponse;
 
@@ -11,6 +13,6 @@ public interface BoardService {
 
     WriteBoardResponse getPost(Long id);
 
-    List<WriteBoardResponse> getPostAll();
+    Page<WriteBoardResponse> getPostAll(BoardSearchCond searchRequest);
 
 }

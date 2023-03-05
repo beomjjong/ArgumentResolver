@@ -1,11 +1,13 @@
 package portfolio.beom.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import portfolio.beom.argumentresolver.LoginUser;
 import portfolio.beom.argumentresolver.MemberSession;
+import portfolio.beom.dto.request.BoardSearchCond;
 import portfolio.beom.dto.request.WriteBoardRequest;
 import portfolio.beom.dto.response.WriteBoardResponse;
 import portfolio.beom.service.BoardService;
@@ -34,8 +36,9 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WriteBoardResponse>> getPostAll() {
-        List<WriteBoardResponse> posts = boardService.getPostAll();
+    public ResponseEntity<Page<WriteBoardResponse>> getPostAll(BoardSearchCond searchRequest) {
+        Page<WriteBoardResponse> posts = boardService.getPostAll(searchRequest);
+        //TODO 글 전체 개수 필드 추가.
         return new ResponseEntity<>(posts, HttpStatus.OK);
 
     }

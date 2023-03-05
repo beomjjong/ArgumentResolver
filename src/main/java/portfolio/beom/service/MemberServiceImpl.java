@@ -60,7 +60,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @Transactional
     public MemberSession getUser(String email) {
         Member member = memberRepository.findByEmail(email).orElseThrow(IllegalArgumentException::new);
 

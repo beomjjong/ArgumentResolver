@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import portfolio.beom.argumentresolver.MemberSession;
-import portfolio.beom.argumentresolver.SessionConst;
 import portfolio.beom.domain.board.Board;
 import portfolio.beom.dto.request.WriteBoardRequest;
 import portfolio.beom.dto.response.WriteBoardResponse;
 import portfolio.beom.repository.BoardRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -33,5 +34,27 @@ public class BoardServiceImpl implements BoardService{
         Board savedWrite = boardRepository.save(board);
 
         return new WriteBoardResponse(savedWrite);
+    }
+
+    @Transactional
+    @Override
+    public WriteBoardResponse getPost(Long id) {
+        Board board = boardRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        return new WriteBoardResponse(board);
+    }
+
+    @Transactional
+    @Override
+    public List<WriteBoardResponse> getPostAll() {
+        List<Board> posts = boardRepository.findAll();
+
+        List<WriteBoardResponse> list = new ArrayList<>();
+
+        for (Board board : posts) {
+            WriteBoardResponse response = new WriteBoardResponse(board);
+            list.add(response);
+        }
+        return list;
     }
 }

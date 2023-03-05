@@ -1,4 +1,6 @@
-package portfolio.beom.exception;
+package portfolio.beom.exception.post;
+
+import portfolio.beom.exception.BeomException;
 
 public class FailedWriteBoardException extends BeomException {
 

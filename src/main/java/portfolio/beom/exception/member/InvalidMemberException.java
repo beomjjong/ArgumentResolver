@@ -1,4 +1,6 @@
-package portfolio.beom.exception;
+package portfolio.beom.exception.member;
+
+import portfolio.beom.exception.BeomException;
 
 public class InvalidMemberException extends BeomException {
 

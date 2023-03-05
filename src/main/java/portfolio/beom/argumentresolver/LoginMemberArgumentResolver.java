@@ -6,7 +6,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import portfolio.beom.exception.InvalidMemberException;
+import portfolio.beom.exception.member.InvalidMemberException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
